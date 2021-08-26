@@ -20,7 +20,10 @@
 
 <style  lang='css'>
   .nav-bar{
+    position: fixed;
+    z-index: 100;
     display: flex;
+    width: 100%;
     height: 44px;
     line-height: 44px;
     box-shadow: 0 1px 1px rgba(100, 100, 100, .2);

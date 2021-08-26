@@ -41,6 +41,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 
 <style  lang='css'>
   .swipers img{
+    padding-top: 44px;
     width: 100vw;
   }
 .swiper-pagination-bullet-active {
