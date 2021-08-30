@@ -29,6 +29,7 @@
     display: flex;
     flex-wrap: wrap;
     padding-top: 10px;
+    padding-bottom: 49px;
     justify-content: space-around;
   }
 </style>

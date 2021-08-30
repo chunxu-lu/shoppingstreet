@@ -1,5 +1,5 @@
 <template>
-  <tab-bar>
+  <tab-bar class="tab-bar">
       <TabBarItem path="/home" activeColor="deeppink">
         <img slot="item-icon" src="@/assets/img/tabbar/home1.svg" alt="">
         <img slot="item-icon-active" src="@/assets/img/tabbar/home2.svg" alt="">
@@ -33,6 +33,6 @@ import TabBar from 'components/common/tabbar/TabBar'
   }
 </script>
 
-<style  lang='css'>
+<style  lang='css' scoped>
 
 </style>
