@@ -31,6 +31,41 @@
         ></GoodInfo>
 
         <ShopInfo :shopInfo="shopInfo"></ShopInfo>
+
+        <DetailImg></DetailImg>
+
+          <div class="rate">
+          商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            商品评论
+            <hr>
+            <h3 style="text-align:center">商品推荐</h3>
+            <GoodsList :goods="recommends"></GoodsList>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
         <br />
     <br /><br />
     <br /><br />
@@ -44,15 +79,19 @@ import NavBar from "components/common/navbar/NavBar";
 import Swiper from "components/common/swiper/Swiper";
 import GoodInfo from "components/content/goodinfo/GoodInfo";
 import ShopInfo from "components/content/shopinfo/ShopInfo";
+import DetailImg from "components/content/detailimg/DetailImg";
+import GoodsList from "components/content/goods/GoodsList";
 
-import { getDetail } from "network/detail";
+import { getDetail,getRecommend } from "network/detail";
 import { Shop } from "network/detail.js";
 export default {
   components: {
     NavBar,
     Swiper,
     GoodInfo,
-    ShopInfo
+    ShopInfo,
+    DetailImg,
+    GoodsList
   },
   data() {
     return {
@@ -72,7 +111,8 @@ export default {
       oldprice: 0,
       sellcount: 0,
       coll: 0,
-      shopInfo: {}   //要按照类型传默认{}，如果默认null会报错
+      shopInfo: {},//要按照类型传默认{}，如果默认null会报错
+      recommends:[]   
     };
   },
   created() {
@@ -87,6 +127,10 @@ export default {
           // 店铺信息
           this.shopInfo = new Shop(res[0].itemInfo);
       });
+
+      getRecommend().then(res =>{
+        this.recommends = res
+      })
   },
   methods: {
     titleClick(index) {
