@@ -1,7 +1,6 @@
 <template>
   <div>
     <NavBar style="position:fixed;z-index:999999;background-color:white;width:100%;">
-
       <div slot="left" @click="goBack">
         <img class="left-img" src="@/assets/img/detail/goback.svg" alt />
       </div>
@@ -15,62 +14,55 @@
           @click="titleClick(index)"
         >{{title}}</span>
       </div>
-
     </NavBar>
     <br />
     <br />
+    <Scroll ref="scroll" class="content" @scroll="scroll">
+      <Swiper class="swiper" :banners="topImgs"></Swiper>
 
-    <Swiper class="swiper" :banners="topImgs"></Swiper>
+      <GoodInfo
+        :coll="coll"
+        :tit="tit"
+        :newprice="newprice"
+        :oldprice="oldprice"
+        :sellcount="sellcount"
+      ></GoodInfo>
 
-    <GoodInfo
-          :coll="coll"
-          :tit="tit"
-          :newprice="newprice"
-          :oldprice="oldprice"
-          :sellcount="sellcount"
-        ></GoodInfo>
+      <ShopInfo :shopInfo="shopInfo"></ShopInfo>
 
-        <ShopInfo :shopInfo="shopInfo"></ShopInfo>
+      <DetailImg ref="params"></DetailImg>
 
-        <DetailImg></DetailImg>
+      <div class="rate">
+        商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />商品评论
+        <hr />
+      </div>
 
-          <div class="rate">
-          商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            商品评论
-            <hr>
-            <h3 style="text-align:center">商品推荐</h3>
-            <GoodsList :goods="recommends"></GoodsList>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-    <br /><br />
-    <br /><br />
-    <br /><br />
-    <br />
+    <h3 style="text-align:center">商品推荐</h3>
+    <GoodsList :goods="recommends" ref="recommends"></GoodsList>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+    </Scroll>
   </div>
 </template>
 
@@ -81,8 +73,9 @@ import GoodInfo from "components/content/goodinfo/GoodInfo";
 import ShopInfo from "components/content/shopinfo/ShopInfo";
 import DetailImg from "components/content/detailimg/DetailImg";
 import GoodsList from "components/content/goods/GoodsList";
+import Scroll from "components/common/scroll/Scroll";
 
-import { getDetail,getRecommend } from "network/detail";
+import { getDetail, getRecommend } from "network/detail";
 import { Shop } from "network/detail.js";
 export default {
   components: {
@@ -91,7 +84,8 @@ export default {
     GoodInfo,
     ShopInfo,
     DetailImg,
-    GoodsList
+    GoodsList,
+    Scroll
   },
   data() {
     return {
@@ -111,39 +105,59 @@ export default {
       oldprice: 0,
       sellcount: 0,
       coll: 0,
-      shopInfo: {},//要按照类型传默认{}，如果默认null会报错
-      recommends:[]   
+      shopInfo: {}, //要按照类型传默认{}，如果默认null会报错
+      recommends: [],
+      themeTopYs: []
     };
   },
   created() {
-    this.id = this.$route.params.id,
+    (this.id = this.$route.params.id),
       getDetail(this.id).then(res => {
-          this.topImgs = res[0].itemInfo.topImgs,
-          this.tit = res[0].itemInfo.tit,
-          this.newprice = res[0].itemInfo.newprice,
-          this.oldprice = res[0].itemInfo.oldprice,
-          this.sellcount = res[0].itemInfo.sellcount,
-          this.coll = res[0].itemInfo.coll
-          // 店铺信息
-          this.shopInfo = new Shop(res[0].itemInfo);
+        (this.topImgs = res[0].itemInfo.topImgs),
+          (this.tit = res[0].itemInfo.tit),
+          (this.newprice = res[0].itemInfo.newprice),
+          (this.oldprice = res[0].itemInfo.oldprice),
+          (this.sellcount = res[0].itemInfo.sellcount),
+          (this.coll = res[0].itemInfo.coll);
+        // 店铺信息
+        this.shopInfo = new Shop(res[0].itemInfo);
       });
 
-      getRecommend().then(res =>{
-        this.recommends = res
-      })
+    getRecommend().then(res => {
+      this.recommends = res;
+    });
+
+    
+  },
+  mounted() {},
+  updated() {
+    this.$nextTick(()=>{   //获取到下一次dom更新时的数据
+      this.themeTopYs=[]
+      this.themeTopYs.push(0)
+    this.themeTopYs.push(this.$refs.params.$el.offsetTop)
+    this.themeTopYs.push(document.querySelector('.rate').offsetTop)  //非组件元素不能用ref获取
+    this.themeTopYs.push(this.$refs.recommends.$el.offsetTop)
+    })
   },
   methods: {
     titleClick(index) {
       this.currentIndex = index;
+      this.$refs.scroll.scroll.scrollTo(0,-this.themeTopYs[index],500)
     },
     goBack() {
       this.$router.back();
+    },
+    scroll(position) {
+      return;
     }
   }
 };
 </script>
 
 <style  lang='css' scoped>
+.content {
+  height: 100vh;
+}
 .titles-item {
   font-size: 13.5px;
   padding: 0 5px;
@@ -156,5 +170,4 @@ export default {
   margin-top: 10px;
   margin-left: 10px;
 }
-
 </style>
