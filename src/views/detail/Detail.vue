@@ -53,7 +53,7 @@
       <br />
       <br />
     </Scroll>
-    <DetailBottom></DetailBottom>
+    <DetailBottom @addCart="addCart"></DetailBottom>
   </div>
 </template>
 
@@ -145,10 +145,18 @@ export default {
     swiperLoad(){
       this.themeTopYs=[]
       this.themeTopYs.push(0)
-    this.themeTopYs.push(this.$refs.params.$el.offsetTop - 30)
-    this.themeTopYs.push(document.querySelector('.rate').offsetTop - 50)  //非组件元素不能用ref获取
-    this.themeTopYs.push(this.$refs.recommends.$el.offsetTop - 80)
-    console.log(this.themeTopYs);
+      this.themeTopYs.push(this.$refs.params.$el.offsetTop - 30)
+      this.themeTopYs.push(document.querySelector('.rate').offsetTop - 50)  //非组件元素不能用ref获取
+      this.themeTopYs.push(this.$refs.recommends.$el.offsetTop - 80)
+      console.log(this.themeTopYs);
+    },
+    addCart(){
+      const product = {}
+      product.image = this.topImgs[0]
+      product.tit = this.tit
+      product.newprice = this.newprice
+      product.id = this.id
+      this.$store.dispatch('addCart',product)
     }
   }
 };

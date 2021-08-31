@@ -132,7 +132,9 @@ export default {
         rfrom != "/category" &&
         rfrom != "/cart" &&
         rfrom != "/profile" &&
-        rfrom != "/detail"
+        rfrom != "/detail"  &&
+        rfrom != "/detail/1"  &&
+        rfrom != "/detail/2"
       ) {
         var t = new Date();
         setTimeout(() => {
