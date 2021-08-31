@@ -18,7 +18,7 @@
     <br />
     <br />
     <Scroll ref="scroll" class="content" @scroll="scroll">
-      <Swiper class="swiper" :banners="topImgs"></Swiper>
+      <Swiper class="swiper" @swiperLoad="swiperLoad" :banners="topImgs"></Swiper>
 
       <GoodInfo
         :coll="coll"
@@ -48,21 +48,12 @@
         <hr />
       </div>
 
-    <h3 style="text-align:center">商品推荐</h3>
-    <GoodsList :goods="recommends" ref="recommends"></GoodsList>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      <h3 style="text-align:center">商品推荐</h3>
+      <GoodsList :goods="recommends" ref="recommends"></GoodsList>
       <br />
       <br />
     </Scroll>
+    <DetailBottom></DetailBottom>
   </div>
 </template>
 
@@ -74,6 +65,7 @@ import ShopInfo from "components/content/shopinfo/ShopInfo";
 import DetailImg from "components/content/detailimg/DetailImg";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
+import DetailBottom from "components/content/detailbottom/DetailBottom";
 
 import { getDetail, getRecommend } from "network/detail";
 import { Shop } from "network/detail.js";
@@ -85,7 +77,8 @@ export default {
     ShopInfo,
     DetailImg,
     GoodsList,
-    Scroll
+    Scroll,
+    DetailBottom
   },
   data() {
     return {
@@ -131,24 +124,31 @@ export default {
   },
   mounted() {},
   updated() {
-    this.$nextTick(()=>{   //获取到下一次dom更新时的数据
-      this.themeTopYs=[]
-      this.themeTopYs.push(0)
-    this.themeTopYs.push(this.$refs.params.$el.offsetTop)
-    this.themeTopYs.push(document.querySelector('.rate').offsetTop)  //非组件元素不能用ref获取
-    this.themeTopYs.push(this.$refs.recommends.$el.offsetTop)
-    })
   },
   methods: {
     titleClick(index) {
       this.currentIndex = index;
-      this.$refs.scroll.scroll.scrollTo(0,-this.themeTopYs[index],500)
+      this.$refs.scroll.scroll.scrollTo(0,-this.themeTopYs[index],300)
     },
     goBack() {
       this.$router.back();
     },
     scroll(position) {
-      return;
+      let positionY = -position.y
+      let length = this.themeTopYs.length
+      for(let i = 0;i<length;i++){
+        if(this.currentIndex != i && (i < length - 1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1])||(i==length-1 && positionY >= this.themeTopYs[i])){
+          this.currentIndex = i
+        }
+      }
+    },
+    swiperLoad(){
+      this.themeTopYs=[]
+      this.themeTopYs.push(0)
+    this.themeTopYs.push(this.$refs.params.$el.offsetTop - 30)
+    this.themeTopYs.push(document.querySelector('.rate').offsetTop - 50)  //非组件元素不能用ref获取
+    this.themeTopYs.push(this.$refs.recommends.$el.offsetTop - 80)
+    console.log(this.themeTopYs);
     }
   }
 };
@@ -156,7 +156,8 @@ export default {
 
 <style  lang='css' scoped>
 .content {
-  height: 100vh;
+  height: calc(100vh - 44px);
+  z-index: 400;
 }
 .titles-item {
   font-size: 13.5px;
