@@ -7,17 +7,20 @@
     <br>
     <br>
     <CartList></CartList>
+    <CartBottomBar></CartBottomBar>
   </div>
 </template>
 
 <script>
 import NavBar from 'components/common/navbar/NavBar'
 import CartList from 'components/content/cartlist/CartList'
+import CartBottomBar from 'components/content/cartbottombar/CartBottomBar'
 
   export default{
     components:{
       NavBar,
-      CartList
+      CartList,
+      CartBottomBar
     }
   }
 </script>

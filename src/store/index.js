@@ -12,6 +12,7 @@ const store = new Vuex.Store({
       payload.count++
     },
     addCart(state,payload){
+      payload.checked = true
       state.cartList.push(payload)
     }
   },

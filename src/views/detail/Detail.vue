@@ -54,6 +54,8 @@
       <br />
     </Scroll>
     <DetailBottom @addCart="addCart"></DetailBottom>
+
+    <Toast :message="message" v-show="show"></Toast>
   </div>
 </template>
 
@@ -66,6 +68,7 @@ import DetailImg from "components/content/detailimg/DetailImg";
 import GoodsList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
 import DetailBottom from "components/content/detailbottom/DetailBottom";
+import Toast from "components/common/toast/Toast";
 
 import { getDetail, getRecommend } from "network/detail";
 import { Shop } from "network/detail.js";
@@ -78,7 +81,8 @@ export default {
     DetailImg,
     GoodsList,
     Scroll,
-    DetailBottom
+    DetailBottom,
+    Toast
   },
   data() {
     return {
@@ -100,7 +104,9 @@ export default {
       coll: 0,
       shopInfo: {}, //要按照类型传默认{}，如果默认null会报错
       recommends: [],
-      themeTopYs: []
+      themeTopYs: [],
+      message:'',
+      show:false
     };
   },
   created() {
@@ -157,6 +163,14 @@ export default {
       product.newprice = this.newprice
       product.id = this.id
       this.$store.dispatch('addCart',product)
+
+      this.show = true
+      this.message = '已成功添加到购物车!'
+
+      setTimeout(()=>{
+        this.show = false
+        this.message = ''
+      },1500)
     }
   }
 };

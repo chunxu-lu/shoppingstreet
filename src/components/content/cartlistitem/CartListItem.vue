@@ -1,8 +1,8 @@
 <template>
   <div class="cartitem">
     <div class="product">
-      <div class="correct">
-        <img src="@/assets/img/cart/correct.svg" alt="">
+      <div class="correct" :class="{checked:product.checked}" @click="checkClick">
+        <img src="@/assets/img/cart/correct.svg" alt=""  v-show="product.checked">
       </div>
       <div class="left">
         <img :src="product.image" alt="">
@@ -27,6 +27,11 @@
           return {}
         }
       }
+    },
+    methods:{
+      checkClick(){
+        this.product.checked = !this.product.checked
+      }
     }
   }
 </script>
@@ -37,10 +42,16 @@
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--color-tint);
+    border: 2px solid gray;
     color: #fff;
   }
+  .checked{
+    background: var(--color-tint);
+  }
   .correct img{
+    position: relative;
+    left: -1px;
+    top: -1px;
     width: 15px;
   }
   .left{
